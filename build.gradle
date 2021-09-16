@@ -2,6 +2,7 @@
 
 buildscript {
     ext.kotlin_version = '1.4.32' // See also below the same value in ext
+    ext.coroutines_version = '1.4.1'
     repositories {
 //        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
 //        maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter' }

@@ -9,6 +9,7 @@ import android.widget.ProgressBar
 import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager.widget.ViewPager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
@@ -25,6 +26,8 @@ import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
@@ -64,7 +67,9 @@ class MainActivity : AppCompatActivity() {
 
         val observable = Observable.create(ObservableOnSubscribe<List<PackageInfoBean>> { emitter ->
             Log.i(TAG, "subscribe()")
-            emitter.onNext(initData())
+            lifecycleScope.launch(Dispatchers.Main) {
+                emitter.onNext(initData())
+            }
         })
 
         val consumer = Consumer<List<PackageInfoBean>> {
@@ -188,7 +193,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initData(): List<PackageInfoBean> {
+    private suspend fun initData(): List<PackageInfoBean> {
         val allApps = PackageInfoUtil.getAllInstalledApp(this)
         for (app in allApps) {
             Log.d(TAG, "System App: ${app}")
