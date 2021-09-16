@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Package Information</string>
+
+    <string name="tab_name_1">User</string>
+    <string name="tab_name_2">System</string>
+
+    <string name="dlg_positive_button">Copy</string>
+    <string name="dlg_negative_button">Launch</string>
+    <string name="dlg_neutral_button">More</string>
+
+    <string name="dlg_action_more_uninstall">Uninstall</string>
+    <string name="dlg_action_more_detail">App Information</string>
+    <string name="dlg_action_more_backup">Backup App</string>
+    <string name="dlg_action_more_export_app">Export App</string>
+    <string name="dlg_action_more_export_icon">Export Icon</string>
+    <string name="dlg_action_more_share">Share</string>
+
+    <string name="menu_batch_copy_package_name">Batch Copy Package Name</string>
+    <string name="menu_sort">Sort</string>
+    <string name="menu_restore_bak">Restore Bak App</string>
+    <string name="menu_about">About</string>
+
+</resources>

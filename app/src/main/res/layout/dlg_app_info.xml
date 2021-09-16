@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent"
+                                                   android:paddingLeft="16dp"
+                                                   android:paddingRight="16dp"
+                                                   android:paddingBottom="16dp">
+
+    <TextView
+            android:text="Package Name:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:textStyle="bold"/>
+    <TextView
+            android:text="Launch Activity:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView4"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/tvPackageName" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:textStyle="bold"/>
+    <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="com.ho1ho.android.demo"
+            android:ems="10"
+            android:id="@+id/tvPackageName" android:layout_marginTop="2dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/component_bottom_line"
+    />
+    <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="com.ho1ho.android.demo.MainActivity"
+            android:ems="10"
+            android:id="@+id/tvLaunchActivity" android:layout_marginTop="2dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView4" android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginEnd="8dp"
+            android:background="@drawable/component_bottom_line"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    <TextView
+            android:text="SHA1:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView6" android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/tvLaunchActivity" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:textStyle="bold"/>
+    <TextView
+            android:text="56:23:99:E3:DD:B2:D3:D7:E8:6F:83:DE:76:16:4D:53:0C:7C:29:6B"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvSha1" android:layout_marginTop="2dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView6" app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/component_bottom_line"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
+    <TextView
+            android:text="MD5:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView8" android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/tvSha1" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:textStyle="bold"/>
+    <TextView
+            android:text="C1:D2:24:E2:C8:8A:4F:FB:CA:D5:76:DC:98:C3:DF:A3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvMd5" android:layout_marginTop="2dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView8" app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/component_bottom_line"
+            android:layout_marginStart="8dp" android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"/>
+    <TextView
+            android:text="Size:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView11" android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/tvMd5" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:textStyle="bold"/>
+    <TextView
+            android:text="2.62MB"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvSize" android:layout_marginTop="2dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView11" app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/component_bottom_line"
+            android:layout_marginStart="8dp" android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"/>
+    <TextView
+            android:text="Install Date:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView13" android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/tvSize" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:textStyle="bold"/>
+    <TextView
+            android:text="2019-05-16"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvInstallDate" android:layout_marginTop="2dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView13" app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/component_bottom_line"
+            android:layout_marginStart="8dp" android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"/>
+    <TextView
+            android:text="Version:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView15"
+            app:layout_constraintTop_toBottomOf="@+id/tvLastUpdateDate" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:textStyle="bold" android:layout_marginTop="10dp"/>
+    <TextView
+            android:text="1.0"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvVersion" android:layout_marginTop="2dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView15" app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/component_bottom_line"
+            android:layout_marginStart="8dp" android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"/>
+    <TextView
+            android:text="Version Code:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView17" android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/tvVersion" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:textStyle="bold"/>
+    <TextView
+            android:text="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvVersionCode" android:layout_marginTop="2dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView17" app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/component_bottom_line"
+            android:layout_marginStart="8dp" android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"/>
+    <TextView
+            android:text="Last Update Date:"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView19" android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/tvInstallDate" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            android:textStyle="bold"/>
+    <TextView
+            android:text="2019-06-03"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvLastUpdateDate" android:layout_marginTop="2dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView19" app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/component_bottom_line"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

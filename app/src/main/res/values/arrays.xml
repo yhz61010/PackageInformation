@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="action_more">
+        <item>@string/dlg_action_more_uninstall</item>
+        <item>@string/dlg_action_more_detail</item>
+        <item>@string/dlg_action_more_backup</item>
+        <item>@string/dlg_action_more_export_app</item>
+        <item>@string/dlg_action_more_export_icon</item>
+        <item>@string/dlg_action_more_share</item>
+    </string-array>
+
+</resources>
