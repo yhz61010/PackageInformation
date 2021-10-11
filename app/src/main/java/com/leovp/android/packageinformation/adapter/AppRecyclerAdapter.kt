@@ -188,7 +188,8 @@ class AppRecyclerAdapter(var appList: MutableList<PackageInfoBean>) :
 //            customView.tvPackageName.paintFlags = customView.tvPackageName.paintFlags or Paint.UNDERLINE_TEXT_FLAG
 
             customView.findViewById<TextView>(R.id.tvLaunchActivity).text = app.launchActivity
-            customView.findViewById<TextView>(R.id.tvPackageName).text = APKUtil.readableFileSize(app.appSize)
+            customView.findViewById<TextView>(R.id.tvPackageName).text = app.appPackage
+            customView.findViewById<TextView>(R.id.tvSize).text = APKUtil.readableFileSize(app.appSize)
             customView.findViewById<TextView>(R.id.tvVersion).text = app.appVersion
             customView.findViewById<TextView>(R.id.tvVersionCode).text = app.appVersionCode.toString()
             customView.findViewById<TextView>(R.id.tvSha1).text = app.sha1
