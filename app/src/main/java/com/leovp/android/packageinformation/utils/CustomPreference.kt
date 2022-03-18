@@ -12,8 +12,6 @@ import kotlin.reflect.KProperty
  */
 class CustomPreference<T>(val key: String, val default: T) : ReadWriteProperty<Any?, T> {
 
-    private val TAG = CustomPreference::class.java.simpleName
-
     private val prefs by lazy {
         CustomApplication.instance.getSharedPreferences(
             "package_information",
@@ -33,7 +31,7 @@ class CustomPreference<T>(val key: String, val default: T) : ReadWriteProperty<A
     private fun getPreference(key: String, default: T) = with(prefs) {
         val result: Any = when (default) {
             is Long -> getLong(key, default)
-            is String -> getString(key, default)
+            is String -> getString(key, default)!!
             is Int -> getInt(key, default)
             is Boolean -> getBoolean(key, default)
             is Float -> getFloat(key, default)

@@ -30,7 +30,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.ext.coroutines_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
@@ -38,7 +37,7 @@ dependencies {
     implementation "androidx.annotation:annotation:$androidXAnnotations"
     implementation "com.google.android.material:material:$materialVersion"
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1"
 //    implementation "androidx.legacy:legacy-support-v4:$androidXLegacySupport"
 //    implementation "androidx.cardview:cardview:$cardVersion"
 //    implementation "com.google.guava:guava:$guavaVersion"
