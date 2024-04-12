@@ -194,7 +194,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private suspend fun initData(): List<PackageInfoBean> {
-        val allApps = PackageInfoUtil.getAllInstalledApp(this)
+        val allApps = PackageInfoUtil.getAllInstalledApp(applicationContext)
         for (app in allApps) {
             Log.d(TAG, "System App: ${app}")
 //            Log.d(TAG, "Launch Activity : ${app.launchActivity}")

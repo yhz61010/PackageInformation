@@ -2,13 +2,20 @@ package com.leovp.android.packageinformation.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ApplicationInfo
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.os.Build
 import android.util.Log
 import com.leovp.android.packageinformation.utils.StringUtil.bytesToHex
 import com.leovp.android.packageinformation.utils.beans.PackageInfoBean
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.withContext
 import java.security.MessageDigest
 
 /**
@@ -23,23 +30,28 @@ object PackageInfoUtil {
     @JvmStatic
     suspend fun getAllInstalledApp(ctx: Context): List<PackageInfoBean> = withContext(Dispatchers.IO) {
         val st = System.currentTimeMillis()
-//          pm.getInstalledPackages(PackageManager.GET_ACTIVITIES or PackageManager.GET_META_DATA)
         val pm = ctx.packageManager
-        val packages = pm.getInstalledPackages(0)
+        val mainIntent = Intent(Intent.ACTION_MAIN, null)
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
+        val appList: List<ResolveInfo> = ctx.queryCompactIntentActivities(mainIntent, 0)
         val allTasks = mutableListOf<Deferred<PackageInfoBean>>()
 
-        for (packageInfo in packages) {
+        for (app in appList) {
             allTasks.add(async {
                 var isSystemApp = false
-                if ((packageInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 0) {
+                if (app.activityInfo != null
+                    && ((app.activityInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM > 0)
+                            || app.activityInfo.processName == ctx.packageName)
+                ) {
                     isSystemApp = true
                 }
 
+                val pkgInfo: PackageInfo = ctx.getCompactPackageInfo(app.activityInfo.packageName, 0)
                 val signatureListSha1: List<String>
                 val signatureListMd5: List<String>
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     // New signature
-                    val sig = pm.getPackageInfo(packageInfo.packageName, PackageManager.GET_SIGNING_CERTIFICATES).signingInfo
+                    val sig = pm.getPackageInfo(app.activityInfo.packageName, PackageManager.GET_SIGNING_CERTIFICATES).signingInfo
                     signatureListSha1 = if (sig.hasMultipleSigners()) {
                         // Send all with apkContentsSigners
                         sig.apkContentsSigners.map {
@@ -71,7 +83,8 @@ object PackageInfoUtil {
                         }
                     }
                 } else {
-                    val sig = pm.getPackageInfo(packageInfo.packageName, PackageManager.GET_SIGNATURES).signatures
+                    @Suppress("DEPRECATION")
+                    val sig = pm.getPackageInfo(app.activityInfo.packageName, PackageManager.GET_SIGNATURES).signatures
                     signatureListSha1 = sig.map {
                         val digest = MessageDigest.getInstance("SHA")
                         digest.update(it.toByteArray())
@@ -84,22 +97,26 @@ object PackageInfoUtil {
                         StringUtil.formatHash(bytesToHex(digest.digest()))
                     }
                 }
-
-                val currentAppLaunchActivity = pm.getLaunchIntentForPackage(packageInfo.packageName)?.resolveActivity(pm)?.className ?: ""
+                val currentAppLaunchActivity = pm.getLaunchIntentForPackage(app.activityInfo.packageName)?.resolveActivity(pm)?.className ?: ""
                 val currentApp = PackageInfoBean(
-                    packageInfo.applicationInfo.loadIcon(pm),
-                    packageInfo.applicationInfo.loadLabel(pm).toString(),
-                    packageInfo.packageName,
-                    packageInfo.versionName ?: "",
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) packageInfo.longVersionCode else (packageInfo.versionCode.toLong()),
-                    APKUtil.getApkSize(ctx, packageInfo.packageName),
+                    app.loadIcon(pm),
+                    app.loadLabel(pm).toString(),
+                    app.activityInfo.packageName,
+                    pkgInfo.versionName,
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        pkgInfo.longVersionCode
+                    } else {
+                        @Suppress("DEPRECATION")
+                        pkgInfo.versionCode.toLong()
+                    },
+                    APKUtil.getApkSize(ctx, app.activityInfo.packageName),
                     currentAppLaunchActivity,
                     isSystemApp,
                     signatureListSha1.joinToString(separator = "\n"),
                     signatureListMd5.joinToString(separator = "\n"),
-                    packageInfo.firstInstallTime,
-                    packageInfo.lastUpdateTime,
-                    packageInfo.applicationInfo.sourceDir
+                    pkgInfo.firstInstallTime,
+                    pkgInfo.lastUpdateTime,
+                    app.activityInfo.applicationInfo.publicSourceDir
                 )
                 currentApp
             })
