@@ -33,72 +33,76 @@ object PackageInfoUtil {
         val allTasks = mutableListOf<Deferred<PackageInfoBean>>()
 
         for (app in appList) {
+            val appInfo = app.applicationInfo
+            requireNotNull(appInfo) { "Application information must not be null." }
             allTasks.add(async {
                 var isSystemApp = false
-                if (app.applicationInfo != null
-                    && ((app.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM > 0)
-                            || app.applicationInfo.processName == ctx.packageName)
-                ) {
+                if ((appInfo.flags and ApplicationInfo.FLAG_SYSTEM > 0)
+                    || appInfo.processName == ctx.packageName) {
                     isSystemApp = true
                 }
 
                 val pkgInfo: PackageInfo = ctx.getCompactPackageInfo(app.packageName, 0)
-                val signatureListSha1: List<String>
-                val signatureListMd5: List<String>
+                var signatureListSha1: List<String> = emptyList<String>()
+                var signatureListMd5: List<String> = emptyList<String>()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     // New signature
                     val sig = pm.getPackageInfo(app.packageName, PackageManager.GET_SIGNING_CERTIFICATES).signingInfo
-                    signatureListSha1 = if (sig.hasMultipleSigners()) {
-                        // Send all with apkContentsSigners
-                        sig.apkContentsSigners.map {
-                            val digest = MessageDigest.getInstance("SHA")
-                            digest.update(it.toByteArray())
-                            StringUtil.formatHash(bytesToHex(digest.digest()))
+                    if (sig != null) {
+                        signatureListSha1 = if (sig.hasMultipleSigners()) {
+                            // Send all with apkContentsSigners
+                            sig.apkContentsSigners.map {
+                                val digest = MessageDigest.getInstance("SHA")
+                                digest.update(it.toByteArray())
+                                StringUtil.formatHash(bytesToHex(digest.digest()))
+                            }
+                        } else {
+                            // Send one with signingCertificateHistory
+                            sig.signingCertificateHistory.map {
+                                val digest = MessageDigest.getInstance("SHA")
+                                digest.update(it.toByteArray())
+                                StringUtil.formatHash(bytesToHex(digest.digest()))
+                            }
                         }
-                    } else {
-                        // Send one with signingCertificateHistory
-                        sig.signingCertificateHistory.map {
-                            val digest = MessageDigest.getInstance("SHA")
-                            digest.update(it.toByteArray())
-                            StringUtil.formatHash(bytesToHex(digest.digest()))
-                        }
-                    }
-                    signatureListMd5 = if (sig.hasMultipleSigners()) {
-                        // Send all with apkContentsSigners
-                        sig.apkContentsSigners.map {
-                            val digest = MessageDigest.getInstance("MD5")
-                            digest.update(it.toByteArray())
-                            StringUtil.formatHash(bytesToHex(digest.digest()))
-                        }
-                    } else {
-                        // Send one with signingCertificateHistory
-                        sig.signingCertificateHistory.map {
-                            val digest = MessageDigest.getInstance("MD5")
-                            digest.update(it.toByteArray())
-                            StringUtil.formatHash(bytesToHex(digest.digest()))
+                        signatureListMd5 = if (sig.hasMultipleSigners()) {
+                            // Send all with apkContentsSigners
+                            sig.apkContentsSigners.map {
+                                val digest = MessageDigest.getInstance("MD5")
+                                digest.update(it.toByteArray())
+                                StringUtil.formatHash(bytesToHex(digest.digest()))
+                            }
+                        } else {
+                            // Send one with signingCertificateHistory
+                            sig.signingCertificateHistory.map {
+                                val digest = MessageDigest.getInstance("MD5")
+                                digest.update(it.toByteArray())
+                                StringUtil.formatHash(bytesToHex(digest.digest()))
+                            }
                         }
                     }
                 } else {
                     @Suppress("DEPRECATION")
                     val sig = pm.getPackageInfo(app.packageName, PackageManager.GET_SIGNATURES).signatures
-                    signatureListSha1 = sig.map {
-                        val digest = MessageDigest.getInstance("SHA")
-                        digest.update(it.toByteArray())
-                        StringUtil.formatHash(bytesToHex(digest.digest()))
-                    }
+                    if (sig != null) {
+                        signatureListSha1 = sig.map {
+                            val digest = MessageDigest.getInstance("SHA")
+                            digest.update(it.toByteArray())
+                            StringUtil.formatHash(bytesToHex(digest.digest()))
+                        }
 
-                    signatureListMd5 = sig.map {
-                        val digest = MessageDigest.getInstance("MD5")
-                        digest.update(it.toByteArray())
-                        StringUtil.formatHash(bytesToHex(digest.digest()))
+                        signatureListMd5 = sig.map {
+                            val digest = MessageDigest.getInstance("MD5")
+                            digest.update(it.toByteArray())
+                            StringUtil.formatHash(bytesToHex(digest.digest()))
+                        }
                     }
                 }
                 val currentAppLaunchActivity = pm.getLaunchIntentForPackage(app.packageName)?.resolveActivity(pm)?.className ?: ""
                 val currentApp = PackageInfoBean(
-                    app.applicationInfo.loadIcon(pm),
-                    app.applicationInfo.loadLabel(pm).toString(),
+                    appInfo.loadIcon(pm),
+                    appInfo.loadLabel(pm).toString(),
                     app.packageName,
-                    pkgInfo.versionName,
+                    pkgInfo.versionName ?: "",
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         pkgInfo.longVersionCode
                     } else {
@@ -112,7 +116,7 @@ object PackageInfoUtil {
                     signatureListMd5.joinToString(separator = "\n"),
                     pkgInfo.firstInstallTime,
                     pkgInfo.lastUpdateTime,
-                    app.applicationInfo.publicSourceDir
+                    appInfo.publicSourceDir
                 )
                 currentApp
             })
